@@ -1,0 +1,65 @@
+/* Additional styles for dynamic sizing */
+.counter-card {
+    /* Add smooth transitions for size changes */
+    transition: all 0.3s ease-in-out;
+    /* Ensure content is always visible */
+    overflow: visible !important;
+    /* Improve text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Ensure proper stacking */
+    z-index: 1;
+    /* Add some depth */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Number animations and transitions */
+.number {
+    transition: all 0.2s ease-out;
+    position: relative;
+    /* Ensure text remains sharp */
+    transform-style: preserve-3d;
+    /* Prevent any text cutoff */
+    margin: 0.2em 0;
+    /* Improve number spacing */
+    text-rendering: optimizeLegibility;
+}
+
+/* Ensure card background expands with content */
+.counter-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+    background: inherit;
+    border-radius: inherit;
+    z-index: -1;
+}
+
+/* Prevent overlap with other elements */
+.counters {
+    isolation: isolate;
+}
+
+/* Optimize for different number lengths */
+.number[data-digits="1"] { min-width: 2.5ch; }
+.number[data-digits="2"] { min-width: 3.2ch; }
+.number[data-digits="3"] { min-width: 4ch; }
+.number[data-digits="4"] { min-width: 4.8ch; }
+.number[data-digits="5"] { min-width: 5.6ch; }
+.number[data-digits="6"] { min-width: 6.4ch; }
+.number[data-digits="7"] { min-width: 7.2ch; }
+
+/* Ensure proper spacing between digits */
+.number {
+    letter-spacing: 0.12em;
+    padding: 0.5em 0.8em;
+}
+
+/* Add subtle shadow to improve readability */
+.counter-card {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}

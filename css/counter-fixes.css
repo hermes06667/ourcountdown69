@@ -1,0 +1,111 @@
+/* Counter number visibility fixes */
+.counter-card {
+    position: relative;
+    box-sizing: border-box;
+    margin: 0 auto;
+    width: auto;
+    min-width: 160px;
+    max-width: 100%;
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure numbers are always visible */
+.number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    min-width: max-content;
+    padding: 0.5em 0.8em;
+    font-family: 'Courier New', monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: visible;
+    text-align: center;
+    font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+    line-height: 1.2;
+    margin: 0.2em 0;
+}
+
+/* Specific number length handling with proper spacing */
+#years { min-width: 3.2ch; }
+#months { min-width: 3.2ch; }
+#weeks { min-width: 3.2ch; }
+#days { min-width: 4.2ch; }
+#hours { min-width: 5.2ch; }
+#minutes { min-width: 6.2ch; }
+#seconds { min-width: 6.2ch; }
+
+/* Container adjustments for better spacing */
+.counters {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    justify-content: center;
+    align-items: stretch;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .counters {
+        padding: 0.8rem;
+        gap: 1rem;
+    }
+
+    .counter-card {
+        padding: 1.2rem;
+        min-width: 140px;
+    }
+    
+    .number {
+        font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+        padding: 0.4em 0.6em;
+        letter-spacing: 0.08em;
+    }
+
+    /* Adjust minimum widths for mobile */
+    #years, #months, #weeks { min-width: 3ch; }
+    #days { min-width: 4ch; }
+    #hours { min-width: 5ch; }
+    #minutes, #seconds { min-width: 6ch; }
+}
+
+/* Medium screens */
+@media (min-width: 481px) and (max-width: 768px) {
+    .counter-card {
+        padding: 1.3rem;
+        min-width: 150px;
+    }
+
+    .number {
+        font-size: clamp(1.3rem, 3.8vw, 1.8rem);
+    }
+}
+
+/* Large screens */
+@media (min-width: 769px) {
+    .counter-card {
+        padding: 1.5rem;
+    }
+
+    .number {
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+    }
+}
+
+/* Ensure no text wrapping or overflow */
+.counter-card {
+    overflow: visible !important;
+    z-index: 1;
+}

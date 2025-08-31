@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folder Creation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .create-folder-btn {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .create-folder-btn:hover {
+            background: #ff1493;
+        }
+        
+        .folder-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .folder-modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .modal-close {
+            float: right;
+            background: #ff4444;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .modal-actions {
+            margin-top: 20px;
+            text-align: right;
+        }
+        
+        .action-btn {
+            padding: 8px 16px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .create-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .cancel-btn {
+            background: #f44336;
+            color: white;
+        }
+        
+        .folders-list {
+            margin-top: 20px;
+        }
+        
+        .folder-item {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #ff69b4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Folder Creation Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Folder Creation</h2>
+        <button class="create-folder-btn" id="createFolderBtn">Create Folder</button>
+        
+        <div class="folders-list" id="foldersList">
+            <h3>Created Folders:</h3>
+            <div id="foldersContainer">
+                <p>No folders created yet</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Folder Creation Modal -->
+    <div class="folder-modal" id="folderModal">
+        <div class="modal-content">
+            <button class="modal-close" id="folderModalClose">×</button>
+            <div class="modal-body">
+                <h3>Create New Folder</h3>
+                <div class="folder-form">
+                    <div class="form-group">
+                        <label for="folderName">Folder Name</label>
+                        <input type="text" id="folderName" placeholder="Enter folder name...">
+                    </div>
+                    <div class="form-group">
+                        <label for="folderDescription">Description (Optional)</label>
+                        <textarea id="folderDescription" placeholder="Describe what this folder contains..."></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="action-btn create-btn" id="confirmCreateFolder">Create Folder</button>
+                        <button class="action-btn cancel-btn" id="cancelCreateFolder">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class FolderTestManager {
+            constructor() {
+                this.folders = [];
+                this.createFolderBtn = document.getElementById('createFolderBtn');
+                this.folderModal = document.getElementById('folderModal');
+                this.folderModalClose = document.getElementById('folderModalClose');
+                this.folderName = document.getElementById('folderName');
+                this.folderDescription = document.getElementById('folderDescription');
+                this.confirmCreateFolder = document.getElementById('confirmCreateFolder');
+                this.cancelCreateFolder = document.getElementById('cancelCreateFolder');
+                this.foldersContainer = document.getElementById('foldersContainer');
+                
+                this.bindEvents();
+                this.loadFolders();
+            }
+            
+            bindEvents() {
+                console.log('Binding events...');
+                
+                if (this.createFolderBtn) {
+                    console.log('Create folder button found, adding listener');
+                    this.createFolderBtn.addEventListener('click', () => {
+                        console.log('Create folder button clicked');
+                        this.showCreateFolderModal();
+                    });
+                } else {
+                    console.error('Create folder button not found!');
+                }
+                
+                if (this.confirmCreateFolder) {
+                    console.log('Confirm button found, adding listener');
+                    this.confirmCreateFolder.addEventListener('click', () => {
+                        console.log('Confirm button clicked');
+                        this.createFolder();
+                    });
+                } else {
+                    console.error('Confirm button not found!');
+                }
+                
+                if (this.cancelCreateFolder) {
+                    console.log('Cancel button found, adding listener');
+                    this.cancelCreateFolder.addEventListener('click', () => {
+                        console.log('Cancel button clicked');
+                        this.closeCreateFolderModal();
+                    });
+                } else {
+                    console.error('Cancel button not found!');
+                }
+                
+                if (this.folderModalClose) {
+                    console.log('Close button found, adding listener');
+                    this.folderModalClose.addEventListener('click', () => {
+                        console.log('Close button clicked');
+                        this.closeCreateFolderModal();
+                    });
+                } else {
+                    console.error('Close button not found!');
+                }
+                
+                // Close modal when clicking outside
+                this.folderModal.addEventListener('click', (e) => {
+                    if (e.target === this.folderModal) {
+                        this.closeCreateFolderModal();
+                    }
+                });
+            }
+            
+            showCreateFolderModal() {
+                console.log('showCreateFolderModal called');
+                this.folderName.value = '';
+                this.folderDescription.value = '';
+                this.folderModal.classList.add('active');
+                console.log('Modal should now be visible');
+            }
+            
+            closeCreateFolderModal() {
+                console.log('closeCreateFolderModal called');
+                this.folderModal.classList.remove('active');
+            }
+            
+            createFolder() {
+                console.log('createFolder called');
+                const name = this.folderName.value.trim();
+                const description = this.folderDescription.value.trim();
+                
+                console.log('Folder name:', name);
+                console.log('Folder description:', description);
+                
+                if (!name) {
+                    alert('Please enter a folder name');
+                    return;
+                }
+                
+                const folder = {
+                    id: Date.now() + Math.random(),
+                    name: name,
+                    description: description,
+                    created_at: new Date().toISOString()
+                };
+                
+                console.log('Created folder:', folder);
+                this.folders.unshift(folder);
+                this.saveFolders();
+                this.renderFolders();
+                this.closeCreateFolderModal();
+                alert('Folder created successfully!');
+            }
+            
+            saveFolders() {
+                localStorage.setItem('testFolders', JSON.stringify(this.folders));
+            }
+            
+            loadFolders() {
+                const saved = localStorage.getItem('testFolders');
+                if (saved) {
+                    this.folders = JSON.parse(saved);
+                    this.renderFolders();
+                }
+            }
+            
+            renderFolders() {
+                if (this.folders.length === 0) {
+                    this.foldersContainer.innerHTML = '<p>No folders created yet</p>';
+                    return;
+                }
+                
+                this.foldersContainer.innerHTML = this.folders.map(folder => `
+                    <div class="folder-item">
+                        <h4>${folder.name}</h4>
+                        <p>${folder.description || 'No description'}</p>
+                        <small>Created: ${new Date(folder.created_at).toLocaleDateString()}</small>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        let folderManager;
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing folder manager');
+            folderManager = new FolderTestManager();
+        });
+    </script>
+</body>
+</html> 
